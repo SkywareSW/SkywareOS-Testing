@@ -567,7 +567,7 @@ case "$1" in
                 echo -e "${RED} Installing alongside hyprland is NOT recommended.${RESET}"
                 git clone https://github.com/acaibowlz/niri-setup.git
                 cd niri-setup
-                ./setup.sh
+                sudo ./setup.sh
                 log "Niri setup completed"
                 echo -e "${GREEN}✔ Niri setup complete${RESET}"
                 echo -e "${YELLOW} Reboot Recommended{RESET}"
@@ -621,6 +621,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
