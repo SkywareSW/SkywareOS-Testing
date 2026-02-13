@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "== SkywareOS full setup starting =="
+echo "== SkywareOS Testing setup starting =="
 
 # -----------------------------
 # Pacman packages (Kitty included)
@@ -277,8 +277,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Beta"
-VERSION_ID=rolling
+VERSION="Testing"
+VERSION_ID=Testing
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -288,11 +288,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Beta"
-VERSION_ID=rolling
-HOME_URL="https://skywareos.dev"
-SUPPORT_URL="https://skywareos.dev/support"
-BUG_REPORT_URL="https://skywareos.dev/bugs"
+VERSION="Testing"
+VERSION_ID=Testing
 LOGO=skywareos
 EOF
 
@@ -584,12 +581,12 @@ case "$1" in
         header
         echo "Updating and running latest Skyware installer..."
 
-        rm -rf SkywareOS 2>/dev/null || true
-        git clone https://github.com/SkywareSW/SkywareOS
-        cd SkywareOS || exit 1
-        sed -i 's/\r$//' skyware-setup.sh
-        chmod +x skyware-setup.sh
-        ./skyware-setup.sh
+        rm -rf SkywareOS-Testing 2>/dev/null || true
+        git clone https://github.com/SkywareSW/SkywareOS-Testing
+        cd SkywareOS-Testing || exit 1
+        sed -i 's/\r$//' skyware-testingsetup.sh
+        chmod +x skyware-testingsetup.sh
+        ./skyware-testingsetup.sh
         ;;
     autoremove) autoremove ;;
     sync) sync_mirrors ;;
@@ -624,6 +621,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
