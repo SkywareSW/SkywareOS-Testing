@@ -571,6 +571,7 @@ case "$1" in
                 cd niri-setup
                 chmod +x setup.sh
                 ./setup.sh
+                cp niri/* /etc/niri/
                 log "Niri setup completed"
                 echo -e "${GREEN}✔ Niri setup complete${RESET}"
                 echo -e "${YELLOW} Reboot Recommended{RESET}"
@@ -624,6 +625,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
