@@ -584,7 +584,7 @@ case "$1" in
                 ;;
         esac
         ;;
-    script)
+    upgrade)
         header
         echo "Updating and running latest Skyware installer..."
 
@@ -628,6 +628,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
