@@ -17,7 +17,8 @@ echo "1) NVIDIA (Modern)"
 echo "2) NVIDIA"
 echo "3) AMD"
 echo "4) Intel"
-read -rp "Enter choice (1/2/3/4): " gpu_choice
+echo "5) VMware"
+read -rp "Enter choice (1/2/3/4/5): " gpu_choice
 
 case "$gpu_choice" in
     1)
@@ -36,6 +37,10 @@ case "$gpu_choice" in
     4)
         echo "Installing Intel drivers..."
         sudo pacman -S --noconfirm xf86-video-intel mesa
+        ;;
+    5)
+        echo "Installing VMware drivers..."
+        sudo pacman -S --noconfirm open-vm-tools mesa
         ;;
     *)
         echo "Invalid choice, skipping GPU drivers."
@@ -628,6 +633,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
