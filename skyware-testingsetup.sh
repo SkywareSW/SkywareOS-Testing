@@ -604,7 +604,7 @@ case "$1" in
         echo "  ware install <pkg>"
         echo "  ware remove <pkg>"
         echo "  ware update"
-        echo "  ware script"
+        echo "  ware upgrade"
         echo "  ware search <pkg>"
         echo "  ware info <pkg>"
         echo "  ware list"
@@ -628,6 +628,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
