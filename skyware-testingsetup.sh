@@ -527,6 +527,41 @@ autoremove() {
     log "Autoremove executed"
 }
 
+power_profile() {
+    profile="$1"
+
+    case "$profile" in
+        balanced)
+            echo -e "${CYAN}→ Setting Balanced mode...${RESET}"
+            sudo pacman -S --needed --noconfirm tlp >/dev/null 2>&1
+            sudo systemctl enable tlp --now
+            sudo cpupower frequency-set -g schedutil >/dev/null 2>&1
+            echo -e "${GREEN}✔ Balanced profile applied${RESET}"
+            ;;
+        performance)
+            echo -e "${CYAN}→ Setting Performance mode...${RESET}"
+            sudo pacman -S --needed --noconfirm cpupower >/dev/null 2>&1
+            sudo cpupower frequency-set -g performance
+            sudo systemctl stop tlp >/dev/null 2>&1
+            echo -e "${GREEN}✔ Performance profile applied${RESET}"
+            ;;
+        battery)
+            echo -e "${CYAN}→ Setting Battery Saver mode...${RESET}"
+            sudo pacman -S --needed --noconfirm tlp >/dev/null 2>&1
+            sudo systemctl enable tlp --now
+            sudo cpupower frequency-set -g powersave >/dev/null 2>&1
+            echo -e "${GREEN}✔ Battery profile applied${RESET}"
+            ;;
+        status)
+            echo -e "${CYAN}Power Profile Status:${RESET}"
+            cpupower frequency-info | grep "current policy"
+            ;;
+        *)
+            echo -e "${YELLOW}Usage: ware power <balanced|performance|battery|status>${RESET}"
+            ;;
+    esac
+}
+
 sync_mirrors() {
     sudo pacman -S --noconfirm reflector
     sudo reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
@@ -551,6 +586,7 @@ case "$1" in
     info) shift; header; pacman -Si "$1" 2>/dev/null || (have_paru && paru -Si "$1") || flatpak info "$1" ;;
     list) header; pacman -Q; flatpak list ;;
     doctor) doctor ;;
+    power) shift; power_profile "$1" ;;
     clean) clean_cache ;;
     setup)
         shift
@@ -646,6 +682,7 @@ case "$1" in
         echo "  ware remove <pkg>"
         echo "  ware update"
         echo "  ware upgrade"
+        echo "  ware power(balanced/performance/battery/status)"
         echo "  ware search <pkg>"
         echo "  ware info <pkg>"
         echo "  ware list"
@@ -655,8 +692,8 @@ case "$1" in
         echo "  ware sync"
         echo "  ware interactive"
         echo "  ware --json <command>"
-        echo "  ware setup <hyprland/lazyvim>"
-        echo "  ware setup niri<experimental>"
+        echo "  ware setup (hyprland/lazyvim)"
+        echo "  ware setup niri(experimental)"
         ;;
 esac
 EOF
@@ -669,6 +706,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
