@@ -483,10 +483,38 @@ remove_pkg() {
 
 doctor() {
     header
+
+    echo -e "${CYAN}→ Checking package database integrity...${RESET}"
     sudo pacman -Dk
+
+    echo ""
+    echo -e "${CYAN}→ Checking Flatpak integrity...${RESET}"
     flatpak repair --dry-run
+
+    echo ""
+    echo -e "${CYAN}→ Checking firewall status...${RESET}"
+
+    if command -v ufw >/dev/null 2>&1; then
+        if systemctl is-enabled ufw >/dev/null 2>&1; then
+            if systemctl is-active ufw >/dev/null 2>&1; then
+                echo -e "${GREEN}✔ Firewall (ufw) is installed and ACTIVE${RESET}"
+            else
+                echo -e "${YELLOW}⚠ Firewall (ufw) is installed but NOT running${RESET}"
+                echo -e "  → Start it with: sudo systemctl start ufw"
+            fi
+        else
+            echo -e "${YELLOW}⚠ Firewall (ufw) is installed but NOT enabled${RESET}"
+            echo -e "  → Enable it with: sudo systemctl enable ufw"
+        fi
+    else
+        echo -e "${RED}✖ Firewall (ufw) is NOT installed${RESET}"
+        echo -e "  → Install with: sudo pacman -S ufw"
+    fi
+
+    echo ""
     echo -e "${GREEN}Diagnostics complete.${RESET}"
 }
+
 
 clean_cache() {
     sudo pacman -Sc --noconfirm
@@ -641,6 +669,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
