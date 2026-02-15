@@ -80,6 +80,7 @@ case "$de_choice" in
         echo "Installing Deepin..."
         sudo pacman -S --noconfirm deepin deepin-kwin deepin-extra
         sudo systemctl enable lightdm
+        ;;
     *)
         echo "Invalid choice, skipping DE installation."
         ;;
@@ -780,6 +781,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
