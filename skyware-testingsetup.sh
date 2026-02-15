@@ -326,7 +326,6 @@ sudo gtk-update-icon-cache /usr/share/icons/hicolor
 # SDDM branding (login screen)
 # -----------------------------
 sudo pacman -S --noconfirm sddm breeze sddm-kcm
-sudo systemctl enable sddm
 
 sudo mkdir -p /etc/sddm.conf.d
 sudo tee /etc/sddm.conf.d/10-skywareos.conf > /dev/null << 'EOF'
@@ -798,6 +797,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
