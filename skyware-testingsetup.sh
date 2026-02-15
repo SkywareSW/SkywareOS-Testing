@@ -597,6 +597,36 @@ display_manager() {
     esac
 }
 
+ware_status() {
+    header
+
+    echo -e "${CYAN}System Status${RESET}"
+    echo "────────────────────────"
+
+    kernel=$(uname -r)
+    uptime=$(uptime -p)
+    disk=$(df -h / | awk 'NR==2 {print $5}')
+    mem=$(free -h | awk '/Mem:/ {print $3 "/" $2}')
+    de="$XDG_CURRENT_DESKTOP"
+
+    updates=$(checkupdates 2>/dev/null | wc -l)
+
+    if command -v ufw >/dev/null 2>&1 && systemctl is-active ufw >/dev/null 2>&1; then
+        firewall="Active"
+    else
+        firewall="Inactive"
+    fi
+
+    echo -e "Kernel:        $kernel"
+    echo -e "Uptime:        $uptime"
+    echo -e "Updates:       $updates available"
+    echo -e "Firewall:      $firewall"
+    echo -e "Disk Usage:    $disk"
+    echo -e "Memory:        $mem"
+    echo -e "Desktop:       ${de:-Unknown}"
+}
+
+
 sync_mirrors() {
     sudo pacman -S --noconfirm reflector
     sudo reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
@@ -623,6 +653,7 @@ case "$1" in
     doctor) doctor ;;
     power) shift; power_profile "$1" ;;
     dm) shift; display_manager "$@" ;;
+    status) ware_status ;;
     clean) clean_cache ;;
     setup)
         shift
@@ -714,6 +745,7 @@ case "$1" in
     *) 
         header
         echo "Usage:"
+        echo "  ware status"
         echo "  ware install <pkg>"
         echo "  ware remove <pkg>"
         echo "  ware update"
@@ -743,6 +775,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
