@@ -729,6 +729,22 @@ case "$1" in
                 echo -e "${GREEN}✔ Niri setup complete${RESET}"
                 echo -e "${YELLOW} Reboot Recommended{RESET}"
                 ;;
+            mango)
+                header
+                echo -e "${YELLOW}→ Installing MangoWC environment...${RESET}"
+                log "mangowc setup started"
+                pacman -S --noconfirm glibc wayland wayland-protocols libinput libdrm libxkbcommon pixman git meson ninja libdisplay-info libliftoff hwdata seatd pcre2 xorg-xwayland libxcb
+                echo -e "${GREEN} Dependencies installed.${RESET}"
+                echo -e "${YELLOW}→ Installing MangoWC...${RESET}"
+                yay -S mangowc-git
+                echo -e "${GREEN} MangoWC installed.${RESET}"
+                echo -e "${YELLOW}→ Setting up MangoWC Dotfiles...${RESET}"
+                yay -S rofi foot xdg-desktop-portal-wlr swaybg waybar wl-clip-persist cliphist wl-clipboard wlsunset xfce-polkit swaync pamixer wlr-dpms sway-audio-idle-inhibit-git swayidle dimland-git brightnessctl swayosd wlr-randr grim slurp satty swaylock-effects-git wlogout sox
+                git clone https://github.com/DreamMaoMao/mango-config.git ~/.config/mango
+                log "MangoWC setup completed"
+                echo -e "${GREEN}✔ MangoWC setup complete${RESET}"
+                echo -e "${YELLOW} Reboot Recommended{RESET}"
+                ;;
             *)
                 echo -e "${RED}Unknown setup target${RESET}"
                 ;;
@@ -769,6 +785,7 @@ case "$1" in
         echo "  ware --json <command>"
         echo "  ware setup (hyprland/lazyvim)"
         echo "  ware setup niri(experimental)"
+        echo "  ware setup mango(experimental)"
         ;;
 esac
 EOF
@@ -781,6 +798,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
