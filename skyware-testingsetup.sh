@@ -10,6 +10,14 @@ sudo pacman -Syu --noconfirm \
     flatpak cmatrix fastfetch btop zsh alacritty kitty curl git base-devel
 
 # -----------------------------
+# Firewall (finally)
+# -----------------------------
+sudo pacman -S --noconfirm ufw fail2ban
+sudo systemctl enable ufw
+sudo systemctl enable fail2ban
+sudo ufw enable
+
+# -----------------------------
 # GPU Driver Selection
 # -----------------------------
 echo "Select your GPU driver:"
@@ -633,6 +641,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
