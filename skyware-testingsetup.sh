@@ -58,10 +58,12 @@ esac
 # -----------------------------
 # Desktop Environment / Compositor Selection
 # -----------------------------
+sudo pacman -S --noconfirm gdm lightdm sddm
 echo "Select your Desktop Environment / Compositor:"
 echo "1) KDE Plasma"
 echo "2) GNOME"
-read -rp "Enter choice (1/2): " de_choice
+echo "3) Deepin"
+read -rp "Enter choice (1/2/3): " de_choice
 
 case "$de_choice" in
     1)
@@ -74,6 +76,10 @@ case "$de_choice" in
         sudo pacman -S --noconfirm gnome gnome-extra gdm
         sudo systemctl enable gdm
         ;;
+    3)
+        echo "Installing Deepin..."
+        sudo pacman -S --noconfirm deepin deepin-kwin deepin-extra
+        sudo systemctl enable lightdm
     *)
         echo "Invalid choice, skipping DE installation."
         ;;
@@ -774,6 +780,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
