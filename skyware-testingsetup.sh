@@ -733,7 +733,7 @@ case "$1" in
                 header
                 echo -e "${YELLOW}→ Installing MangoWC environment...${RESET}"
                 log "mangowc setup started"
-                pacman -S --noconfirm glibc wayland wayland-protocols libinput libdrm libxkbcommon pixman git meson ninja libdisplay-info libliftoff hwdata seatd pcre2 xorg-xwayland libxcb
+                sudo pacman -S --noconfirm glibc wayland wayland-protocols libinput libdrm libxkbcommon pixman git meson ninja libdisplay-info libliftoff hwdata seatd pcre2 xorg-xwayland libxcb
                 echo -e "${GREEN} Dependencies installed.${RESET}"
                 echo -e "${YELLOW}→ Installing MangoWC...${RESET}"
                 yay -S mangowc-git
@@ -798,6 +798,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
