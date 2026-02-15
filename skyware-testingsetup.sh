@@ -6,13 +6,13 @@ echo "== SkywareOS Testing setup starting =="
 # -----------------------------
 # Pacman packages (Kitty included)
 # -----------------------------
-sudo pacman -Syu --noconfirm \
+sudo pacman -Syu --noconfirm --needed \
     flatpak cmatrix fastfetch btop zsh alacritty kitty curl git base-devel
 
 # -----------------------------
 # Firewall (finally)
 # -----------------------------
-sudo pacman -S --noconfirm ufw fail2ban
+sudo pacman -S --noconfirm --needed ufw fail2ban
 sudo systemctl enable ufw
 sudo systemctl enable fail2ban
 sudo ufw enable
@@ -58,7 +58,7 @@ esac
 # -----------------------------
 # Desktop Environment / Compositor Selection
 # -----------------------------
-sudo pacman -S --noconfirm gdm lightdm sddm
+sudo pacman -S --noconfirm --needed gdm lightdm sddm
 echo "Select your Desktop Environment / Compositor:"
 echo "1) KDE Plasma"
 echo "2) GNOME"
@@ -733,13 +733,13 @@ case "$1" in
                 header
                 echo -e "${YELLOW}→ Installing MangoWC environment...${RESET}"
                 log "mangowc setup started"
-                sudo pacman -S --noconfirm glibc wayland wayland-protocols libinput libdrm libxkbcommon pixman git meson ninja libdisplay-info libliftoff hwdata seatd pcre2 xorg-xwayland libxcb
+                sudo pacman -S --noconfirm --needed glibc wayland wayland-protocols libinput libdrm libxkbcommon pixman git meson ninja libdisplay-info libliftoff hwdata seatd pcre2 xorg-xwayland libxcb
                 echo -e "${GREEN} Dependencies installed.${RESET}"
                 echo -e "${YELLOW}→ Installing MangoWC...${RESET}"
                 yay -S mangowc-git
                 echo -e "${GREEN} MangoWC installed.${RESET}"
                 echo -e "${YELLOW}→ Setting up MangoWC Dotfiles...${RESET}"
-                yay -S rofi foot xdg-desktop-portal-wlr swaybg waybar wl-clip-persist cliphist wl-clipboard wlsunset xfce-polkit swaync pamixer wlr-dpms sway-audio-idle-inhibit-git swayidle dimland-git brightnessctl swayosd wlr-randr grim slurp satty swaylock-effects-git wlogout sox
+                yay -S --noconfirm rofi foot xdg-desktop-portal-wlr swaybg waybar wl-clip-persist cliphist wl-clipboard wlsunset xfce-polkit swaync pamixer wlr-dpms sway-audio-idle-inhibit-git swayidle dimland-git brightnessctl swayosd wlr-randr grim slurp satty swaylock-effects-git wlogout sox
                 git clone https://github.com/DreamMaoMao/mango-config.git ~/.config/mango
                 log "MangoWC setup completed"
                 echo -e "${GREEN}✔ MangoWC setup complete${RESET}"
@@ -798,6 +798,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
