@@ -400,7 +400,6 @@ log() {
 
 header() {
     [ "$JSON_MODE" = true ] && return
-    echo -e "${BLUE}SkywareOS Package Manager (ware)${RESET}"
     echo ""
 }
 
@@ -775,6 +774,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
