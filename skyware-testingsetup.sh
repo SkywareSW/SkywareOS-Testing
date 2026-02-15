@@ -556,7 +556,7 @@ power_profile() {
             cpupower frequency-info | grep "current policy"
             ;;
         *)
-            echo -e "${YELLOW}Usage: ware power <balanced|performance|battery|status>${RESET}"
+            echo -e "${YELLOW}Usage: ware power <balanced|performance|battery>${RESET}"
             ;;
     esac
 }
@@ -749,7 +749,7 @@ case "$1" in
         echo "  ware remove <pkg>"
         echo "  ware update"
         echo "  ware upgrade"
-        echo "  ware power (balanced/performance/battery/status)"
+        echo "  ware power (balanced/performance/battery)"
         echo "  ware dm (switch/list/status)"
         echo "  ware search <pkg>"
         echo "  ware info <pkg>"
@@ -774,6 +774,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
