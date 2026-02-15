@@ -562,6 +562,41 @@ power_profile() {
     esac
 }
 
+display_manager() {
+    action="$1"
+    dm="$2"
+
+    case "$action" in
+        list)
+            echo -e "${CYAN}Available Display Managers:${RESET}"
+            echo "  sddm"
+            echo "  gdm"
+            echo "  lightdm"
+            ;;
+        status)
+            current=$(systemctl list-unit-files | grep -E 'gdm|sddm|lightdm' | grep enabled)
+            echo -e "${CYAN}Current enabled DM:${RESET}"
+            echo "$current"
+            ;;
+        switch)
+            if [[ -z "$dm" ]]; then
+                echo -e "${RED}Specify a display manager${RESET}"
+                return
+            fi
+
+            echo -e "${YELLOW}→ Switching to $dm...${RESET}"
+
+            sudo systemctl disable gdm sddm lightdm 2>/dev/null
+            sudo systemctl enable "$dm"
+
+            echo -e "${GREEN}✔ $dm enabled. Reboot required.${RESET}"
+            ;;
+        *)
+            echo -e "${YELLOW}Usage: ware dm <list|switch|status>${RESET}"
+            ;;
+    esac
+}
+
 sync_mirrors() {
     sudo pacman -S --noconfirm reflector
     sudo reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
@@ -587,6 +622,7 @@ case "$1" in
     list) header; pacman -Q; flatpak list ;;
     doctor) doctor ;;
     power) shift; power_profile "$1" ;;
+    dm) shift; display_manager "$@" ;;
     clean) clean_cache ;;
     setup)
         shift
@@ -682,7 +718,8 @@ case "$1" in
         echo "  ware remove <pkg>"
         echo "  ware update"
         echo "  ware upgrade"
-        echo "  ware power(balanced/performance/battery/status)"
+        echo "  ware power (balanced/performance/battery/status)"
+        echo "  ware dm (switch/list/status)"
         echo "  ware search <pkg>"
         echo "  ware info <pkg>"
         echo "  ware list"
@@ -706,6 +743,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
