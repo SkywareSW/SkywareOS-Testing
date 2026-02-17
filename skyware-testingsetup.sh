@@ -239,54 +239,6 @@ modified = "!"
 untracked = "?"
 EOF
 
-# -----------------------------
-# Alacritty dark-gray theme
-# -----------------------------
-ALACRITTY_DIR="$HOME/.config/alacritty"
-mkdir -p "$ALACRITTY_DIR"
-
-cat > "$ALACRITTY_DIR/alacritty.yml" << 'EOF'
-colors:
-  primary:
-    background: '#1E1E1E'
-    foreground: '#D4D4D4'
-  normal:
-    black:   '#1E1E1E'
-    red:     '#FF5F5F'
-    green:   '#5FFF5F'
-    yellow:  '#FFFFAF'
-    blue:    '#5F87FF'
-    magenta: '#AF5FFF'
-    cyan:    '#5FFFFF'
-    white:   '#D4D4D4'
-font:
-  size: 11
-EOF
-
-# -----------------------------
-# Kitty dark-gray theme
-# -----------------------------
-KITTY_DIR="$HOME/.config/kitty"
-mkdir -p "$KITTY_DIR"
-
-cat > "$KITTY_DIR/kitty.conf" << 'EOF'
-background #1E1E1E
-foreground #D4D4D4
-selection_background #333333
-selection_foreground #FFFFFF
-
-color0  #1E1E1E
-color1  #FF5F5F
-color2  #5FFF5F
-color3  #FFFFAF
-color4  #5F87FF
-color5  #AF5FFF
-color6  #5FFFFF
-color7  #D4D4D4
-
-font_size 11
-EOF
-
 echo "== Finalizing Installation =="
 
 # -----------------------------
@@ -797,6 +749,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
