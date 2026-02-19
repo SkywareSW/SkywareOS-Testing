@@ -705,7 +705,7 @@ case "$1" in
                 echo -e "${YELLOW}→ Installing DWM...${RESET}"
                 sudo git clone https://github.com/stocky789/dwm-arch.git
                 cd dwm-arch
-                sudo ./install.sh
+                ./install.sh
                 log "DWM setup completed"
                 echo -e "${GREEN}✔ DWM setup complete${RESET}"
                 echo -e "${YELLOW} Reboot Recommended{RESET}"
@@ -763,6 +763,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
