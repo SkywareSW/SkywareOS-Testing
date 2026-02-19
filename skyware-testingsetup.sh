@@ -700,10 +700,10 @@ case "$1" in
                 header
                 echo -e "${YELLOW}→ Installing DWM environment...${RESET}"
                 log "DWM setup started"
-                sudo pacman -S --noconfirm dwm
+                yay -S dwm --noconfirm
                 echo -e "${GREEN} Dependencies installed.${RESET}"
                 echo -e "${YELLOW}→ Installing DWM...${RESET}"
-                git clone https://github.com/stocky789/dwm-arch.git
+                sudo git clone https://github.com/stocky789/dwm-arch.git
                 cd dwm-arch
                 sudo ./install.sh
                 log "DWM setup completed"
@@ -763,6 +763,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
