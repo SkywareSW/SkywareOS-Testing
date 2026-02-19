@@ -700,7 +700,7 @@ case "$1" in
                 header
                 echo -e "${YELLOW}→ Installing DWM environment...${RESET}"
                 log "DWM setup started"
-                yay -S dwm --noconfirm
+                sudo pacman -S ttf-jetbrains-mono-nerd --noconfirm
                 echo -e "${GREEN} Dependencies installed.${RESET}"
                 echo -e "${YELLOW}→ Installing DWM...${RESET}"
                 curl -sSL https://raw.githubusercontent.com/seeingangelz/dotfiles/master/.github/dots_bootstrap.sh | bash -s && cd ~/Documents/dotfiles/ && ./install.sh
@@ -761,6 +761,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
