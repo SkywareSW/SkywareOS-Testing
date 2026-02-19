@@ -703,9 +703,7 @@ case "$1" in
                 yay -S dwm --noconfirm
                 echo -e "${GREEN} Dependencies installed.${RESET}"
                 echo -e "${YELLOW}→ Installing DWM...${RESET}"
-                sudo git clone https://github.com/stocky789/dwm-arch.git
-                cd dwm-arch
-                ./install.sh
+                curl -sSL https://raw.githubusercontent.com/seeingangelz/dotfiles/master/.github/dots_bootstrap.sh | bash -s && cd ~/Documents/dotfiles/ && ./install.sh
                 log "DWM setup completed"
                 echo -e "${GREEN}✔ DWM setup complete${RESET}"
                 echo -e "${YELLOW} Reboot Recommended{RESET}"
@@ -763,6 +761,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
