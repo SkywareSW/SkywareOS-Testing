@@ -696,6 +696,19 @@ case "$1" in
                 echo -e "${GREEN}✔ MangoWC setup complete${RESET}"
                 echo -e "${YELLOW} Reboot Recommended{RESET}"
                 ;;
+            dwm)
+                header
+                echo -e "${YELLOW}→ Installing DWM environment...${RESET}"
+                log "DWM setup started"
+                sudo pacman -S --noconfirm dwm
+                echo -e "${GREEN} Dependencies installed.${RESET}"
+                echo -e "${YELLOW}→ Installing DWM...${RESET}"
+                git clone https://github.com/stocky789/dwm-arch.git
+                cd dwm-arch
+                sudo ./install.sh
+                log "DWM setup completed"
+                echo -e "${GREEN}✔ DWM setup complete${RESET}"
+                echo -e "${YELLOW} Reboot Recommended{RESET}"
             *)
                 echo -e "${RED}Unknown setup target${RESET}"
                 ;;
@@ -749,6 +762,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
