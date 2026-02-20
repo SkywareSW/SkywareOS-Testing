@@ -12,7 +12,7 @@ chmod +x skyware-testingsetup.sh\
 
 * Ware
 
-* ware status - Shows kernel and version, Uptime, Available updates, Firewall status, Disk usage, Memory usage, and current desktop
+* ware status - Shows kernel and version, Uptime, Available updates, Firewall status, Disk usage, Memory usage, Current desktop and current channel
 
 * ware install - Searches for said package through pacman, flatpak and aur and then proceeds to install it
 
