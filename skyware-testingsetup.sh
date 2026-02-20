@@ -590,15 +590,6 @@ sync_mirrors() {
     log "Mirrors synced"
 }
 
-switch_channel {
-    sudo rm -rf SkywareOS-Testing
-    git clone https://github.com/SkywareSW/SkywareOS
-    cd SkywareOS
-    sed -i 's/\r$//' skyware-setup.sh
-    chmod +x skyware-setup.sh
-    ./skyware-setup.sh
-}
-
 interactive_install() {
     read -rp "Enter package name: " pkg
     install_pkg "$pkg"
@@ -621,6 +612,14 @@ case "$1" in
     dm) shift; display_manager "$@" ;;
     status) ware_status ;;
     clean) clean_cache ;;
+    switch)
+        sudo rm -rf SkywareOS-Testing
+        git clone https://github.com/SkywareSW/SkywareOS
+        cd SkywareOS
+        sed -i 's/\r$//' skyware-setup.sh
+        chmod +x skyware-setup.sh
+        ./skyware-setup.sh
+        ;;
     setup)
         shift
         case "$1" in
@@ -771,6 +770,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
