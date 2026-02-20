@@ -581,6 +581,7 @@ ware_status() {
     echo -e "Disk Usage:    $disk"
     echo -e "Memory:        $mem"
     echo -e "Desktop:       ${de:-Unknown}"
+    echo -e "Channel:       Testing"
 }
 
 
@@ -770,6 +771,7 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
+
 
 
 
