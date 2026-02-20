@@ -50,7 +50,7 @@ chmod +x skyware-testingsetup.sh\
 
 * ware --json - Run a custom command/script using JSON
 
-* ware setup hyprland - Automatically Sets up hyprland with jakoolit's dotfiles\
+* ware setup hyprland - Automatically Sets up hyprland with jakoolit's dotfiles
 
 * ware setup lazyvim - Automatically sets up Lazyvim
 
