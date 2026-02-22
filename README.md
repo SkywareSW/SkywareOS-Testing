@@ -58,3 +58,5 @@ chmod +x skyware-testingsetup.sh\
 * ware setup mango - Automatically sets up MangoWC (EXPERIMENTAL)
 
 * ware setup dwm - Automatically sets up DWM (EXPERIMENTAL)
+
+* ware setup i3 - Automatically sets up i3 (EXPERIMENTAL)
