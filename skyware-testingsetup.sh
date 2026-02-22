@@ -638,6 +638,7 @@ case "$1" in
         echo -e "ware setup niri - Automatically sets up Niri (EXPERIMENTAL)"
         echo -e "ware setup mango - Automatically sets up MangoWC (EXPERIMENTAL)"
         echo -e "ware setup dwm - Automatically sets up DWM (EXPERIMENTAL)"
+        echo -e "ware setup i3 - Automatically sets up i3 (EXPERIMENTAL)"
         ;;
     switch)
         sudo rm -rf SkywareOS-Testing
@@ -743,6 +744,20 @@ case "$1" in
                 echo -e "${GREEN}✔ DWM setup complete${RESET}"
                 echo -e "${YELLOW} Reboot Recommended{RESET}"
                 ;;
+            i3)
+                header
+                echo -e "${YELLOW}→ Installing i3 environment...${RESET}"
+                log "i3 setup started"
+                yay -S --needed btop code dunst fastfetch feh i3-wm i3lock-color kitty mate-polkit mpd ncmpcpp papirus-icon-theme picom polybar rofi xss-lock zsh zed ttf-roboto-mono ttf-opensans ttf-iosevka-nerd ffcast inotify-tools jq libnotify rofi-vscode-mode scrot slop upower xclip
+                echo -e "${GREEN} Dependencies installed.${RESET}"
+                echo -e "${YELLOW}→ Installing i3...${RESET}"
+                git clone -b v4 --depth 1 https://www.github.com/keyitdev/dotfiles.git "$HOME"/dotfiles
+                cp -ri "$HOME"/dotfiles/home/. "$HOME"/
+                sudo cp -ri "$HOME"/dotfiles/usr/.  /usr/
+                og "i3 setup completed"
+                echo -e "${GREEN}✔ i3 setup complete${RESET}"
+                echo -e "${YELLOW} Reboot Recommended{RESET}"
+                ;;
             *)
                 echo -e "${RED}Unknown setup target${RESET}"
                 ;;
@@ -786,6 +801,7 @@ case "$1" in
         echo "  ware setup (hyprland/lazyvim)"
         echo "  ware setup niri(experimental)"
         echo "  ware setup mango(experimental)"
+        echo "  ware setup (dwm/i3)(very experimental)"
         ;;
 esac
 EOF
