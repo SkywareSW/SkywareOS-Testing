@@ -249,8 +249,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 1.53"
-VERSION_ID=Testing_1-53
+VERSION="Testing 54"
+VERSION_ID=Testing_54
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -260,8 +260,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 1.53"
-VERSION_ID=Testing-1-53
+VERSION="Testing 54"
+VERSION_ID=Testing-54
 LOGO=skywareos
 EOF
 
