@@ -249,8 +249,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing"
-VERSION_ID=Testing
+VERSION="Testing 1.53"
+VERSION_ID=Testing_1-53
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -260,8 +260,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing"
-VERSION_ID=Testing
+VERSION="Testing 1.53"
+VERSION_ID=Testing-1-53
 LOGO=skywareos
 EOF
 
@@ -334,6 +334,17 @@ sudo cp assets/skywareos.svg \
 # Set Plasma splash automatically
 kwriteconfig6 --file kscreenlockerrc --group Greeter --key Theme org.skywareos.desktop
 kwriteconfig6 --file plasmarc --group Theme --key name org.skywareos.desktop
+
+echo "== Setting KDE Start Menu Logo =="
+
+sudo mkdir -p /usr/share/icons/hicolor/scalable/places
+
+sudo cp assets/skywareos.svg \
+  /usr/share/icons/hicolor/scalable/places/start-here.svg
+
+sudo gtk-update-icon-cache /usr/share/icons/hicolor
+
+echo "✔ Start menu logo applied"
 
 echo "→ SkywareOS Finalization Complete"
 
@@ -814,57 +825,3 @@ sudo chmod +x /usr/local/bin/ware
 # -----------------------------
 echo "== SkywareOS full setup complete =="
 echo "Log out or reboot required"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
