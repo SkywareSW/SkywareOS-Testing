@@ -249,8 +249,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 54"
-VERSION_ID=Testing_54
+VERSION="Testing 55"
+VERSION_ID=Testing_55
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -260,8 +260,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 54"
-VERSION_ID=Testing-54
+VERSION="Testing 55"
+VERSION_ID=Testing-55
 LOGO=skywareos
 EOF
 
@@ -765,7 +765,7 @@ case "$1" in
                 git clone -b v4 --depth 1 https://www.github.com/keyitdev/dotfiles.git "$HOME"/dotfiles
                 cp -ri "$HOME"/dotfiles/home/. "$HOME"/
                 sudo cp -ri "$HOME"/dotfiles/usr/.  /usr/
-                og "i3 setup completed"
+                log "i3 setup completed"
                 echo -e "${GREEN}✔ i3 setup complete${RESET}"
                 echo -e "${YELLOW} Reboot Recommended{RESET}"
                 ;;
