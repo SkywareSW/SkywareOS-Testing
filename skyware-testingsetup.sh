@@ -20,40 +20,36 @@ sudo ufw enable
 # -----------------------------
 # GPU Driver Selection
 # -----------------------------
-echo "Select your GPU driver:"
-echo "1) NVIDIA (Modern)"
-echo "2) NVIDIA"
-echo "3) AMD"
-echo "4) Intel"
-echo "5) VMware"
-read -rp "Enter choice (1/2/3/4/5): " gpu_choice
+echo "== Detecting GPU =="
 
-case "$gpu_choice" in
-    1)
-        echo "Installing Modern NVIDIA drivers..."
-        sudo pacman -S --noconfirm nvidia-open nvidia-utils nvidia-settings
-        ;;
-    
-    2)
-        echo "Installing NVIDIA drivers (DKMS)..."
-        sudo pacman -S --noconfirm nvidia-dkms nvidia-utils nvidia-settings
-        ;;
-    3)
-        echo "Installing AMD drivers..."
-        sudo pacman -S --noconfirm xf86-video-amdgpu mesa
-        ;;
-    4)
-        echo "Installing Intel drivers..."
-        sudo pacman -S --noconfirm xf86-video-intel mesa
-        ;;
-    5)
-        echo "Installing VMware drivers..."
-        sudo pacman -S --noconfirm open-vm-tools mesa
-        ;;
-    *)
-        echo "Invalid choice, skipping GPU drivers."
-        ;;
-esac
+GPU_INFO=$(lspci | grep -E "VGA|3D")
+
+if echo "$GPU_INFO" | grep -qi "NVIDIA"; then
+    echo "→ NVIDIA GPU detected"
+
+    if echo "$GPU_INFO" | grep -qi "RTX\|GTX 16"; then
+        echo "Installing modern NVIDIA (nvidia-open)..."
+        sudo pacman -S --noconfirm --needed nvidia-open nvidia-utils nvidia-settings
+    else
+        echo "Installing NVIDIA DKMS..."
+        sudo pacman -S --noconfirm --needed nvidia-dkms nvidia-utils nvidia-settings
+    fi
+
+elif echo "$GPU_INFO" | grep -qi "AMD"; then
+    echo "→ AMD GPU detected"
+    sudo pacman -S --noconfirm --needed xf86-video-amdgpu mesa
+
+elif echo "$GPU_INFO" | grep -qi "Intel"; then
+    echo "→ Intel GPU detected"
+    sudo pacman -S --noconfirm --needed xf86-video-intel mesa
+
+elif echo "$GPU_INFO" | grep -qi "VMware"; then
+    echo "→ VMware detected"
+    sudo pacman -S --noconfirm --needed open-vm-tools mesa
+
+else
+    echo "⚠ Could not detect GPU automatically"
+fi
 
 # -----------------------------
 # Desktop Environment / Compositor Selection
@@ -63,6 +59,7 @@ echo "Select your Desktop Environment / Compositor:"
 echo "1) KDE Plasma"
 echo "2) GNOME"
 echo "3) Deepin"
+echo "4) Skip"
 read -rp "Enter choice (1/2/3): " de_choice
 
 case "$de_choice" in
@@ -80,6 +77,9 @@ case "$de_choice" in
         echo "Installing Deepin..."
         sudo pacman -S --noconfirm deepin deepin-kwin deepin-extra
         sudo systemctl enable lightdm
+        ;;
+    4)
+        echo "Skipping..."
         ;;
     *)
         echo "Invalid choice, skipping DE installation."
@@ -249,8 +249,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 55"
-VERSION_ID=Testing_55
+VERSION="Testing 56"
+VERSION_ID=Testing_56
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -260,8 +260,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 55"
-VERSION_ID=Testing-55
+VERSION="Testing 56"
+VERSION_ID=Testing_56
 LOGO=skywareos
 EOF
 
@@ -277,7 +277,7 @@ sudo gtk-update-icon-cache /usr/share/icons/hicolor
 # -----------------------------
 # SDDM branding (login screen)
 # -----------------------------
-sudo pacman -S --noconfirm sddm breeze sddm-kcm
+sudo pacman -S --noconfirm --needed sddm breeze sddm-kcm
 
 sudo mkdir -p /etc/sddm.conf.d
 sudo tee /etc/sddm.conf.d/10-skywareos.conf > /dev/null << 'EOF'
@@ -334,17 +334,6 @@ sudo cp assets/skywareos.svg \
 # Set Plasma splash automatically
 kwriteconfig6 --file kscreenlockerrc --group Greeter --key Theme org.skywareos.desktop
 kwriteconfig6 --file plasmarc --group Theme --key name org.skywareos.desktop
-
-echo "== Setting KDE Start Menu Logo =="
-
-sudo mkdir -p /usr/share/icons/hicolor/scalable/places
-
-sudo cp assets/skywareos.svg \
-  /usr/share/icons/hicolor/scalable/places/start-here.svg
-
-sudo gtk-update-icon-cache /usr/share/icons/hicolor
-
-echo "✔ Start menu logo applied"
 
 echo "→ SkywareOS Finalization Complete"
 
@@ -411,7 +400,7 @@ install_pkg() {
             wait
             log "Installed via pacman: $pkg"
 
-        elif flatpak search "$pkg" | grep -qi "$pkg"; then
+        elif flatpak search --columns=application "$pkg" | grep -Fxq "$pkg"; then
             flatpak install -y flathub "$pkg" &
             spinner
             wait
@@ -592,7 +581,8 @@ ware_status() {
     echo -e "Disk Usage:    $disk"
     echo -e "Memory:        $mem"
     echo -e "Desktop:       ${de:-Unknown}"
-    echo -e "Channel:       Testing"
+    echo -e "Channel:       Release"
+    echo -e "Version:       Red 0.6.1"
 }
 
 
@@ -624,40 +614,13 @@ case "$1" in
     dm) shift; display_manager "$@" ;;
     status) ware_status ;;
     clean) clean_cache ;;
-    help) 
-        echo -e "ware status - Shows kernel and version, Uptime, Available updates, Firewall status, Disk usage, Memory usage, Current desktop and current channel"
-        echo -e "ware install - Searches for said package through pacman, flatpak and aur and then proceeds to install it"
-        echo -e "ware remove - Removes package from system"
-        echo -e "ware update - Updates system and or specific package"
-        echo -e "ware upgrade - Installs and runs the latest version of SkywareOS Testing"
-        echo -e "ware switch - Switches from the Testing channel to the Release channel"
-        echo -e "ware power (balanced/performance/battery) - Switches power mode to either of those three depending on the selection"
-        echo -e "ware dm list - Lists available display managers"
-        echo -e "ware dm status - Shows currently active display manager"
-        echo -e "ware dm switch(sddm/gdm/lightdm) - Switch between the available display managers"
-        echo -e "ware search - Searches for the package or closest matching keyword in pacman, flatpak and aur"
-        echo -e "ware info - Gives available information on a package"
-        echo -e "ware list - Shows installed packages"
-        echo -e "ware doctor - Searches for and fixes any corrupt or broken packages/dependencies, then checks the firewall status"
-        echo -e "ware clean - Removes unused repositories/packages"
-        echo -e "ware autoremove - Automatically removes unused packages"
-        echo -e "ware sync - Syncs mirrors"
-        echo -e "ware interactive - Simpler way to install a package"
-        echo -e "ware --json - Run a custom command/script using JSON"
-        echo -e "ware setup hyprland - Automatically Sets up hyprland with jakoolit's dotfiles"
-        echo -e "ware setup lazyvim - Automatically sets up Lazyvim"
-        echo -e "ware setup niri - Automatically sets up Niri (EXPERIMENTAL)"
-        echo -e "ware setup mango - Automatically sets up MangoWC (EXPERIMENTAL)"
-        echo -e "ware setup dwm - Automatically sets up DWM (EXPERIMENTAL)"
-        echo -e "ware setup i3 - Automatically sets up i3 (EXPERIMENTAL)"
-        ;;
     switch)
-        sudo rm -rf SkywareOS-Testing
-        git clone https://github.com/SkywareSW/SkywareOS
-        cd SkywareOS
-        sed -i 's/\r$//' skyware-setup.sh
-        chmod +x skyware-setup.sh
-        ./skyware-setup.sh
+        sudo rm -rf SkywareOS/
+        git clone https://github.com/SkywareSW/SkywareOS-Testing
+        cd SkywareOS-Testing
+        sed -i 's/\r$//' skyware-testingsetup.sh
+        chmod +x skyware-testingsetup.sh
+        ./skyware-testingsetup.sh
         ;;
     setup)
         shift
@@ -774,7 +737,7 @@ case "$1" in
                 ;;
         esac
         ;;
-    upgrade)
+upgrade)
         header
         echo "Updating and running latest Skyware installer..."
 
@@ -786,7 +749,58 @@ case "$1" in
         ./skyware-testingsetup.sh
         ;;
     autoremove) autoremove ;;
+    snap)
+        header
+        echo -e "${YELLOW}→ Installing Snap support...${RESET}"
+        log "Snap setup started"
+
+        sudo pacman -S --noconfirm snapd
+        sudo systemctl enable --now snapd.socket
+        sudo ln -sf /var/lib/snapd/snap /snap
+
+        echo -e "${GREEN}✔ Snap support enabled${RESET}"
+        log "Snap setup completed"
+        ;;
+    snap-remove)
+        header
+        echo -e "${YELLOW}→ Removing Snap support...${RESET}"
+
+        sudo systemctl disable snapd.socket
+        sudo pacman -Rns --noconfirm snapd
+        sudo rm -f /snap
+
+        echo -e "${GREEN}✔ Snap removed${RESET}"
+        ;;
     sync) sync_mirrors ;;
+    help)
+        echo -e "ware status - Shows kernel and version, Uptime, Available updates, Firewall status, Disk usage, Memory usage, Current desktop and current channel"
+        echo -e "ware install - Searches for said package through pacman, flatpak and aur and then proceeds to install it"
+        echo -e "ware remove - Removes package from system"
+        echo -e "ware update - Updates system and or specific package"
+        echo -e "ware upgrade - Installs and runs the latest version of SkywareOS"
+        echo -e "ware switch - Switches from the Release channel to the Testing channel"
+        echo -e "ware power (balanced/performance/battery) - Switches power mode to either of those three depending on the selection"
+        echo -e "ware dm list - Lists available display managers"
+        echo -e "ware dm status - Shows currently active display manager"
+        echo -e "ware dm switch(sddm/gdm/lightdm) - Switch between the available display managers"
+        echo -e "ware search - Searches for the package or closest matching keyword in pacman, flatpak and aur"
+        echo -e "ware info - Gives available information on a package"
+        echo -e "ware list - Shows installed packages"
+        echo -e "ware doctor - Searches for and fixes any corrupt or broken packages/dependencies, then checks the firewall status"
+        echo -e "ware clean - Removes unused repositories/packages"
+        echo -e "ware autoremove - Automatically removes unused packages"
+        echo -e "ware sync - Syncs mirrors"
+        echo -e "ware interactive - Simpler way to install a package"
+        echo -e "ware --json - Run a custom command/script using JSON"
+        echo -e "ware setup hyprland - Automatically Sets up hyprland with jakoolit's dotfiles"
+        echo -e "ware setup lazyvim - Automatically sets up Lazyvim"
+        echo -e "ware setup niri - Automatically sets up Niri (EXPERIMENTAL)"
+        echo -e "ware setup mango - Automatically sets up MangoWC (EXPERIMENTAL)"
+        echo -e "ware setup snap - Installs and enables the Snap package manager"
+        echo -e "ware setup snap-remove - Removes the Snap package manager"
+        echo -e "ware setup dwm - Automatically sets up DWM (EXPERIMENTAL)"
+        echo -e "ware setup i3 - Automatically sets up i3 (EXPERIMENTAL)"
+        ;;
     interactive) interactive_install ;;
     *) 
         header
@@ -811,6 +825,9 @@ case "$1" in
         echo "  ware --json <command>"
         echo "  ware setup (hyprland/lazyvim)"
         echo "  ware setup niri(experimental)"
+        echo "  ware setup mango(experimental)"
+        echo "  ware setup snap"
+        echo "  ware setup snap-remove"
         echo "  ware setup mango(experimental)"
         echo "  ware setup (dwm/i3)(very experimental)"
         ;;
