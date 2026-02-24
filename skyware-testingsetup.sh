@@ -249,8 +249,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 56"
-VERSION_ID=Testing_56
+VERSION="Testing 57"
+VERSION_ID=Testing_57
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -260,8 +260,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 56"
-VERSION_ID=Testing_56
+VERSION="Testing 57"
+VERSION_ID=Testing_57
 LOGO=skywareos
 EOF
 
@@ -581,8 +581,8 @@ ware_status() {
     echo -e "Disk Usage:    $disk"
     echo -e "Memory:        $mem"
     echo -e "Desktop:       ${de:-Unknown}"
-    echo -e "Channel:       Release"
-    echo -e "Version:       Red 0.6.1"
+    echo -e "Channel:       Testing"
+    echo -e "Version:       57"
 }
 
 
