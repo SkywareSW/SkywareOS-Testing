@@ -54,37 +54,64 @@ fi
 # -----------------------------
 # Desktop Environment / Compositor Selection
 # -----------------------------
-sudo pacman -S --noconfirm --needed gdm lightdm sddm
-echo "Select your Desktop Environment / Compositor:"
-echo "1) KDE Plasma"
-echo "2) GNOME"
-echo "3) Deepin"
-echo "4) Skip"
-read -rp "Enter choice (1/2/3): " de_choice
 
-case "$de_choice" in
-    1)
-        echo "Installing KDE Plasma..."
-        sudo pacman -S --noconfirm plasma kde-applications sddm
-        sudo systemctl enable sddm
-        ;;
-    2)
-        echo "Installing GNOME..."
-        sudo pacman -S --noconfirm gnome gnome-extra gdm
-        sudo systemctl enable gdm
-        ;;
-    3)
-        echo "Installing Deepin..."
-        sudo pacman -S --noconfirm deepin deepin-kwin deepin-extra
-        sudo systemctl enable lightdm
-        ;;
-    4)
-        echo "Skipping..."
-        ;;
-    *)
-        echo "Invalid choice, skipping DE installation."
-        ;;
-esac
+echo "== Checking for existing Desktop Environment =="
+
+DE_ALREADY_INSTALLED=false
+
+# Check for enabled display managers
+if systemctl is-enabled gdm &>/dev/null || \
+   systemctl is-enabled sddm &>/dev/null || \
+   systemctl is-enabled lightdm &>/dev/null; then
+    DE_ALREADY_INSTALLED=true
+fi
+
+# Check for common DE packages
+if pacman -Q plasma-desktop &>/dev/null || \
+   pacman -Q gnome-shell &>/dev/null || \
+   pacman -Q deepin &>/dev/null; then
+    DE_ALREADY_INSTALLED=true
+fi
+
+if [ "$DE_ALREADY_INSTALLED" = true ]; then
+    echo "→ Existing Desktop Environment detected."
+    echo "→ Skipping DE installation."
+else
+    echo "No Desktop Environment detected."
+    sudo pacman -S --noconfirm --needed gdm lightdm sddm
+
+    echo "Select your Desktop Environment:"
+    echo "1) KDE Plasma"
+    echo "2) GNOME"
+    echo "3) Deepin"
+    echo "4) Skip"
+
+    read -rp "Enter choice (1/2/3/4): " de_choice
+
+    case "$de_choice" in
+        1)
+            echo "Installing KDE Plasma..."
+            sudo pacman -S --noconfirm plasma kde-applications sddm
+            sudo systemctl enable sddm
+            ;;
+        2)
+            echo "Installing GNOME..."
+            sudo pacman -S --noconfirm gnome gnome-extra gdm
+            sudo systemctl enable gdm
+            ;;
+        3)
+            echo "Installing Deepin..."
+            sudo pacman -S --noconfirm deepin deepin-kwin deepin-extra lightdm
+            sudo systemctl enable lightdm
+            ;;
+        4)
+            echo "Skipping..."
+            ;;
+        *)
+            echo "Invalid choice, skipping DE installation."
+            ;;
+    esac
+fi
 
 # -----------------------------
 # Flatpak apps
@@ -249,8 +276,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 57"
-VERSION_ID=Testing_57
+VERSION="Testing 58"
+VERSION_ID=Testing_58
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -260,8 +287,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 57"
-VERSION_ID=Testing_57
+VERSION="Testing 58"
+VERSION_ID=Testing_58
 LOGO=skywareos
 EOF
 
@@ -582,7 +609,7 @@ ware_status() {
     echo -e "Memory:        $mem"
     echo -e "Desktop:       ${de:-Unknown}"
     echo -e "Channel:       Testing"
-    echo -e "Version:       57"
+    echo -e "Version:       58"
 }
 
 
