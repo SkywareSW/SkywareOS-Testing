@@ -134,7 +134,7 @@ echo "== Limine Secure Boot Setup =="
 if sbctl status | grep -q "Installed:.*✓"; then
     echo "✔ Secure Boot keys already installed. Skipping setup."
 else
-    read -rp "Do you want to enable Secure Boot keys? (y/N): " enable_sb
+    read -rp "Do you want to enable Secure Boot keys?(Requires Limine) (y/N): " enable_sb
     enable_sb=${enable_sb,,}  # lowercase
 
     if [[ "$enable_sb" == "y" || "$enable_sb" == "yes" ]]; then
@@ -147,16 +147,6 @@ else
         echo "→ Creating Secure Boot keys..."
         sudo sbctl create-keys
         sudo sbctl enroll-keys --microsoft
-
-        # Install Limine via paru
-        if ! command -v limine-install &>/dev/null; then
-            echo "→ Installing Limine via paru..."
-            ensure_paru   # your script already has this function
-            paru -S --noconfirm limine-bin
-        fi
-
-        # Install Limine bootloader to /boot
-        sudo limine-install /boot
 
         # Sign Limine EFI loader
         EFI_LOADER="/boot/EFI/BOOT/BOOTX64.EFI"
@@ -328,8 +318,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 61"
-VERSION_ID=Testing_61
+VERSION="Testing 62"
+VERSION_ID=Testing_62
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -339,8 +329,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 61"
-VERSION_ID=Testing_61
+VERSION="Testing 62"
+VERSION_ID=Testing_62
 LOGO=skywareos
 EOF
 
@@ -661,7 +651,7 @@ ware_status() {
     echo -e "Memory:        $mem"
     echo -e "Desktop:       ${de:-Unknown}"
     echo -e "Channel:       Testing"
-    echo -e "Version:       61"
+    echo -e "Version:       62"
 }
 
 
