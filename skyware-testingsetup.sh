@@ -318,8 +318,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 62"
-VERSION_ID=Testing_62
+VERSION="Testing 63"
+VERSION_ID=Testing_63
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -329,8 +329,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 62"
-VERSION_ID=Testing_62
+VERSION="Testing 63"
+VERSION_ID=Testing_63
 LOGO=skywareos
 EOF
 
@@ -651,7 +651,7 @@ ware_status() {
     echo -e "Memory:        $mem"
     echo -e "Desktop:       ${de:-Unknown}"
     echo -e "Channel:       Testing"
-    echo -e "Version:       62"
+    echo -e "Version:       63"
 }
 
 
@@ -684,12 +684,12 @@ case "$1" in
     status) ware_status ;;
     clean) clean_cache ;;
     switch)
-        sudo rm -rf SkywareOS/
-        git clone https://github.com/SkywareSW/SkywareOS-Testing
-        cd SkywareOS-Testing
-        sed -i 's/\r$//' skyware-testingsetup.sh
-        chmod +x skyware-testingsetup.sh
-        ./skyware-testingsetup.sh
+        sudo rm -rf SkywareOS-Testing/
+        git clone https://github.com/SkywareSW/SkywareOS
+        cd SkywareOS
+        sed -i 's/\r$//' skyware-setup.sh
+        chmod +x skyware-setup.sh
+        ./skyware-setup.sh
         ;;
     setup)
         shift
