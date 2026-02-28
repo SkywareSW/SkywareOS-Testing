@@ -126,7 +126,7 @@ flatpak install -y flathub \
     com.valvesoftware.Steam
 
 # -----------------------------
-# Limine + Secure Boot Support (Interactive + Auto-detect)
+# Limine + Secure Boot Support (Interactive + Auto-detect + paru)
 # -----------------------------
 echo "== Limine Secure Boot Setup =="
 
@@ -148,23 +148,21 @@ else
         sudo sbctl create-keys
         sudo sbctl enroll-keys --microsoft
 
-        # Install Limine (AUR)
+        # Install Limine via paru
         if ! command -v limine-install &>/dev/null; then
-            echo "→ Installing Limine..."
-            git clone https://aur.archlinux.org/limine-bin.git /tmp/limine
-            cd /tmp/limine || exit 1
-            makepkg -si --noconfirm
-            cd /
-            rm -rf /tmp/limine
+            echo "→ Installing Limine via paru..."
+            ensure_paru   # your script already has this function
+            paru -S --noconfirm limine-bin
         fi
 
         # Install Limine bootloader to /boot
         sudo limine-install /boot
 
         # Sign Limine EFI loader
-        if [[ -f /boot/EFI/BOOT/BOOTX64.EFI ]]; then
+        EFI_LOADER="/boot/EFI/BOOT/BOOTX64.EFI"
+        if [[ -f "$EFI_LOADER" ]]; then
             echo "→ Signing Limine EFI loader..."
-            sudo sbctl sign /boot/EFI/BOOT/BOOTX64.EFI
+            sudo sbctl sign "$EFI_LOADER"
         fi
 
         # Sign kernel and initramfs
@@ -330,8 +328,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 59"
-VERSION_ID=Testing_59
+VERSION="Testing 61"
+VERSION_ID=Testing_61
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -341,8 +339,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 59"
-VERSION_ID=Testing_59
+VERSION="Testing 61"
+VERSION_ID=Testing_61
 LOGO=skywareos
 EOF
 
@@ -663,7 +661,7 @@ ware_status() {
     echo -e "Memory:        $mem"
     echo -e "Desktop:       ${de:-Unknown}"
     echo -e "Channel:       Testing"
-    echo -e "Version:       59"
+    echo -e "Version:       61"
 }
 
 
