@@ -126,53 +126,59 @@ flatpak install -y flathub \
     com.valvesoftware.Steam
 
 # -----------------------------
-# Limine + Secure Boot Support
+# Limine + Secure Boot Support (Interactive + Auto-detect)
 # -----------------------------
-echo "== Setting up Limine Secure Boot =="
+echo "== Limine Secure Boot Setup =="
 
-# Install sbctl for signing
-sudo pacman -S --noconfirm --needed sbctl
+# Check if Secure Boot keys are already installed
+if sbctl status | grep -q "Installed:.*✓"; then
+    echo "✔ Secure Boot keys already installed. Skipping setup."
+else
+    read -rp "Do you want to enable Secure Boot keys? (y/N): " enable_sb
+    enable_sb=${enable_sb,,}  # lowercase
 
-# Generate Secure Boot keys (if not exist)
-if ! sbctl status | grep -q "Installed:.*✓"; then
-    echo "→ Creating Secure Boot keys..."
-    sudo sbctl create-keys
-    sudo sbctl enroll-keys --microsoft
+    if [[ "$enable_sb" == "y" || "$enable_sb" == "yes" ]]; then
+        echo "→ Setting up Limine Secure Boot..."
+
+        # Install sbctl for signing
+        sudo pacman -S --noconfirm --needed sbctl
+
+        # Generate Secure Boot keys
+        echo "→ Creating Secure Boot keys..."
+        sudo sbctl create-keys
+        sudo sbctl enroll-keys --microsoft
+
+        # Install Limine (AUR)
+        if ! command -v limine-install &>/dev/null; then
+            echo "→ Installing Limine..."
+            git clone https://aur.archlinux.org/limine-bin.git /tmp/limine
+            cd /tmp/limine || exit 1
+            makepkg -si --noconfirm
+            cd /
+            rm -rf /tmp/limine
+        fi
+
+        # Install Limine bootloader to /boot
+        sudo limine-install /boot
+
+        # Sign Limine EFI loader
+        if [[ -f /boot/EFI/BOOT/BOOTX64.EFI ]]; then
+            echo "→ Signing Limine EFI loader..."
+            sudo sbctl sign /boot/EFI/BOOT/BOOTX64.EFI
+        fi
+
+        # Sign kernel and initramfs
+        [[ -f /boot/vmlinuz-linux ]] && sudo sbctl sign /boot/vmlinuz-linux
+        [[ -f /boot/initramfs-linux.img ]] && sudo sbctl sign /boot/initramfs-linux.img
+
+        # Sign DKMS / NVIDIA modules
+        sudo sbctl sign-all
+
+        echo "✔ Limine Secure Boot setup complete"
+    else
+        echo "→ Skipping Secure Boot setup"
+    fi
 fi
-
-# Install Limine (AUR)
-if ! command -v limine-install &>/dev/null; then
-    echo "→ Installing Limine..."
-    git clone https://aur.archlinux.org/limine-bin.git /tmp/limine
-    cd /tmp/limine || exit 1
-    makepkg -si --noconfirm
-    cd /
-    rm -rf /tmp/limine
-fi
-
-# Install Limine bootloader to /boot
-sudo limine-install /boot
-
-# Sign Limine EFI loader
-if [[ -f /boot/EFI/BOOT/BOOTX64.EFI ]]; then
-    echo "→ Signing Limine EFI loader..."
-    sudo sbctl sign /boot/EFI/BOOT/BOOTX64.EFI
-fi
-
-# Sign kernel and initramfs
-if [[ -f /boot/vmlinuz-linux ]]; then
-    echo "→ Signing kernel and initramfs..."
-    sudo sbctl sign /boot/vmlinuz-linux
-fi
-if [[ -f /boot/initramfs-linux.img ]]; then
-    sudo sbctl sign /boot/initramfs-linux.img
-fi
-
-# Sign DKMS / NVIDIA modules
-sudo sbctl sign-all
-
-echo "✔ Limine Secure Boot setup complete"
-
 # -----------------------------
 # Fastfetch setup (ASCII logo)
 # -----------------------------
