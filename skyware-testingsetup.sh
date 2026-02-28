@@ -126,6 +126,54 @@ flatpak install -y flathub \
     com.valvesoftware.Steam
 
 # -----------------------------
+# Limine + Secure Boot Support
+# -----------------------------
+echo "== Setting up Limine Secure Boot =="
+
+# Install sbctl for signing
+sudo pacman -S --noconfirm --needed sbctl
+
+# Generate Secure Boot keys (if not exist)
+if ! sbctl status | grep -q "Installed:.*✓"; then
+    echo "→ Creating Secure Boot keys..."
+    sudo sbctl create-keys
+    sudo sbctl enroll-keys --microsoft
+fi
+
+# Install Limine (AUR)
+if ! command -v limine-install &>/dev/null; then
+    echo "→ Installing Limine..."
+    git clone https://aur.archlinux.org/limine-bin.git /tmp/limine
+    cd /tmp/limine || exit 1
+    makepkg -si --noconfirm
+    cd /
+    rm -rf /tmp/limine
+fi
+
+# Install Limine bootloader to /boot
+sudo limine-install /boot
+
+# Sign Limine EFI loader
+if [[ -f /boot/EFI/BOOT/BOOTX64.EFI ]]; then
+    echo "→ Signing Limine EFI loader..."
+    sudo sbctl sign /boot/EFI/BOOT/BOOTX64.EFI
+fi
+
+# Sign kernel and initramfs
+if [[ -f /boot/vmlinuz-linux ]]; then
+    echo "→ Signing kernel and initramfs..."
+    sudo sbctl sign /boot/vmlinuz-linux
+fi
+if [[ -f /boot/initramfs-linux.img ]]; then
+    sudo sbctl sign /boot/initramfs-linux.img
+fi
+
+# Sign DKMS / NVIDIA modules
+sudo sbctl sign-all
+
+echo "✔ Limine Secure Boot setup complete"
+
+# -----------------------------
 # Fastfetch setup (ASCII logo)
 # -----------------------------
 FASTFETCH_DIR="$HOME/.config/fastfetch"
@@ -276,8 +324,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 58"
-VERSION_ID=Testing_58
+VERSION="Testing 59"
+VERSION_ID=Testing_59
 HOME_URL="https://github.com/SkywareSW"
 LOGO=skywareos
 EOF
@@ -287,8 +335,8 @@ NAME="SkywareOS"
 PRETTY_NAME="SkywareOS"
 ID=skywareos
 ID_LIKE=arch
-VERSION="Testing 58"
-VERSION_ID=Testing_58
+VERSION="Testing 59"
+VERSION_ID=Testing_59
 LOGO=skywareos
 EOF
 
@@ -609,7 +657,7 @@ ware_status() {
     echo -e "Memory:        $mem"
     echo -e "Desktop:       ${de:-Unknown}"
     echo -e "Channel:       Testing"
-    echo -e "Version:       58"
+    echo -e "Version:       59"
 }
 
 
@@ -652,6 +700,33 @@ case "$1" in
     setup)
         shift
         case "$1" in
+            hyprware)
+                header
+                echo -e "${YELLOW}→ Installing Hyprware environment...${RESET}"
+                log "Hyprware setup started"
+
+                sudo pacman -S --noconfirm \
+                    hyprland \
+                    xdg-desktop-portal-hyprland \
+                    waybar \
+                    wofi \
+                    kitty \
+                    grim \
+                    slurp \
+                    wl-clipboard \
+                    polkit-kde-agent \
+                    pipewire wireplumber \
+                    network-manager-applet \
+                    thunar
+
+                echo -e "${GREEN}✔ Base Hyprland packages installed${RESET}"
+
+                echo -e "${YELLOW}→ Running Skyware Hyprware dotfiles setup...${RESET}"
+                bash <(curl -sL https://raw.githubusercontent.com/SkywareSW/hyprware/main/install.sh)
+
+                log "Hyprware setup completed"
+                echo -e "${GREEN}✔ Hyprware setup complete${RESET}"
+                ;;
             hyprland)
                 header
                 echo -e "${YELLOW}→ Installing Hyprland environment...${RESET}"
